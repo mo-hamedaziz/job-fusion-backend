@@ -25,8 +25,10 @@ export abstract class Baseuser {
         })
         gender: Gender;
     
-
+        @Column({default: false})
+        verified: boolean;
+        
         @Column({ nullable: true})
-    photo: string;
+        photo: string;
     
 }

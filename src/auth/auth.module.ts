@@ -7,6 +7,8 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { Verification } from './Entities/verification_coes.entity';
 import { UserModule } from 'src/user/user.module';
+import { JWtStrategy } from './jwtstrategy';
+import { Recruiter } from 'src/recruiter/Entities/recruiter.entity';
 
 @Module({
   imports: [
@@ -16,11 +18,12 @@ import { UserModule } from 'src/user/user.module';
         expiresIn: "2 days"
       }
     }),
-    TypeOrmModule.forFeature([Verification,User]),
+    TypeOrmModule.forFeature([Verification,User,Recruiter]),
     PassportModule.register({defaultStrategy: 'jwt'}),
     UserModule
   ],
   controllers: [AuthController],
-  providers: [AuthService]
+  providers: [AuthService, JWtStrategy],
+  exports: [AuthService, JWtStrategy]
 })
 export class AuthModule {}

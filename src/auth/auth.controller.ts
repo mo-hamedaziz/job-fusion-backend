@@ -5,6 +5,7 @@ import { AuthService } from './auth.service';
 import { User } from 'src/user/Entities/User.entity';
 
 import { Response } from 'express';
+import { Baseuser } from './Entities/abstract_user';
 
 
 function generateRandomNumberString(length) {
@@ -19,7 +20,6 @@ function generateRandomNumberString(length) {
 @Controller('auth')
 export class AuthController {
 
-
     constructor(private readonly authService: AuthService) {}
 
     @Post('signup')
@@ -28,12 +28,12 @@ export class AuthController {
         const {username, email, password, date_of_birth, Recruiter, PhoneNumber} = SignUpdto
         const salt = await bcrypt.genSalt();
         const password_crypted = await bcrypt.hash(password, salt)
-        let user;
+        let user: Baseuser;
         if (Recruiter == false) {
-          user = await this.authService.add_user(username,email,password,date_of_birth,PhoneNumber)
+          user = await this.authService.add_user(username,email,password_crypted,date_of_birth,PhoneNumber)
         }
         else{
-          user = await this.authService.add_recruiter(username,email,password,date_of_birth,PhoneNumber)
+          user = await this.authService.add_recruiter(username,email,password_crypted,date_of_birth,PhoneNumber)
         }
         
         const code = generateRandomNumberString(6);
@@ -45,32 +45,45 @@ export class AuthController {
     @Post('sign')
     async signin(@Body() signindto: Signindto, @Res() res: Response) {
 
+        console.log("aaa")
         const user=  await this.authService.find_user(signindto.email, signindto.password);
-      
         if (user) {
             if (!user.verified) {
-                return false;
+                return res.status(HttpStatus.UNAUTHORIZED).json({
+                    message:'Unverified User'
+                })
          }
-            else {
+         else {
                 const payload = {
                  userid: user.id,
                 recruiter: false,
+             }
+            const token = this.authService.generateToken(payload);    
+            console.log(token)
+            res.cookie('token',token, {
+                maxAge: 1000 * 60 * 30,
+                httpOnly: true,
+                sameSite: 'none',
+                secure: true,
+            })
+    
+            return res.status(HttpStatus.OK).json({message:'login succesfull'})
         }
-            const token = this.authService.generateToken(payload);
-            //set cookies and such things
-            return token
-    }
-    }
 
+    }
+    console.log('here')
 
     const recruiter=  await this.authService.find_recruiter(signindto.email, signindto.password);
+    console.log(recruiter)
         if (!recruiter){
             return res.status(HttpStatus.UNAUTHORIZED).json({
                 message: 'Auhtentifcation failed'
             })
         }
         if (!recruiter.verified) {
-            return false;
+            return res.status(HttpStatus.UNAUTHORIZED).json({
+                message: 'Auhtentifcation failed'
+            });
         }
         else {
         const payload = {
@@ -78,35 +91,62 @@ export class AuthController {
             recruiter: true,
         }
         const token = this.authService.generateToken(payload);
-        //set cookies and such things
-        return token
+
+        res.cookie('token',token, {
+            maxAge: 1000 * 60 * 30,
+            httpOnly: true,
+            sameSite: 'none',
+            secure: true,
+        })
+
+        return res.status(HttpStatus.OK).json({message:'login succesfull'})
+        
     }
 
     }
 
-    @Get('verify/:code')
-    async verify(@Param('code') code: number, email:string, password:string, @Res() res: Response){
+    @Post('verify/:code')
+    async verify(@Param('code') code: number, @Body() signindto: Signindto, @Res() res: Response){
 
-        // Need 
-        const user=  await this.authService.find_user(email, password);
-        if (!user){
-            return res.status(HttpStatus.UNAUTHORIZED).json({
-                message: 'Auhtentifcation failed'
+        const user=  await this.authService.find_user(signindto.email, signindto.password);
+        console.log(user)
+        if (user){
+        if (user.verified) {
+            return res.status(HttpStatus.ACCEPTED).json({
+                message: 'User Verified1'
+            });
+        }
+
+        if (await this.authService.verify_user(code, user))
+        {
+            this.authService.update_verified_status(user);
+            return res.status(HttpStatus.ACCEPTED).json({
+                message: 'User Verified'
             })
         }
-        if (user.verified) {
-            return true;
+        return res.status(HttpStatus.UNAUTHORIZED).json({
+            message: 'User Unverified'
+        });
+    }
+    else {
+        const recruiter=  await this.authService.find_recruiter(signindto.email, signindto.password);
+        if (recruiter.verified) {
+            return res.status(HttpStatus.ACCEPTED).json({
+                message: 'User verified'
+            });
         }
-
-        if (this.authService.verify_user(code, user))
+        if (await this.authService.verify_user(code, recruiter))
         {
-            // Update the user model
-
-            return this.authService.update_verified_status(user);
-
+            this.authService.update_verified_status(recruiter);
+            return res.status(HttpStatus.ACCEPTED).json({
+                message: 'User verified'
+            })
         }
-        return false;
-
+        return res.status(HttpStatus.UNAUTHORIZED).json({
+            message: 'User Unverified'
+        });
 
     }
+}
+
 }

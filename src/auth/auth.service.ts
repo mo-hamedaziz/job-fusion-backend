@@ -8,6 +8,8 @@ import { Verification } from './Entities/verification_coes.entity';
 import * as bcrypt from 'bcrypt';
 import { JwtPayload } from './dto/jwtpayload.interface';
 import * as jwt from 'jsonwebtoken';
+import { Baseuser } from './Entities/abstract_user';
+import { IsInstance } from 'class-validator';
 
 
 
@@ -43,6 +45,7 @@ export class AuthService {
         user.date_of_birth =new Date(date_of_birth);
         user.phoneNumber =  PhoneNumber;
         await this.userRepository.save(user);
+        console.log(user)
         return user
 
     }
@@ -60,14 +63,12 @@ export class AuthService {
 
     }
 
-    async send_email(code: number,user:User): Promise<void> {
+    async send_email(code: number,user:Baseuser): Promise<void> {
 
         const element = new Verification()
         element.code = code;
-        element.user = user;
         element.userId = user.id;
         this.verificationRepository.save(element)
-        console.log(user.email)
 
         const info = await this.transporter.sendMail({
             from: '"Mailer" <youssef.rouissi@insat.ucar.tn>',
@@ -84,6 +85,9 @@ export class AuthService {
                 email: email,
             }
         });
+        if (!user) {
+            return 
+        }
         const match = await  bcrypt.compare(password, user.password);
         if (!match) {
             return 
@@ -91,20 +95,26 @@ export class AuthService {
         return user
     }
 
-    async verify_user(code:number, user:User): Promise<Boolean>{
+    async verify_user(code:number, user:Baseuser): Promise<Boolean>{
         const verified_code = await this.verificationRepository.findOne(
             {
-                where: {userId: user.id,},
-                relations: ["user"]
-
+                where: {userId: user.id,}
             }
         )
-        return verified_code.code === code;
+        console.log(verified_code)
+        console.log(code)
+        return verified_code.code == code;
     }
 
-    async update_verified_status(user:User): Promise<Boolean> {
+    async update_verified_status(user:Baseuser): Promise<void> {
         user.verified = true;
-        return true;
+        if ( user instanceof User){
+            await this.userRepository.save(user);
+        }
+        else {
+            await this.recruiterRepository.save(user)
+        }
+
         
     }
 

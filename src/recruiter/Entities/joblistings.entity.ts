@@ -20,5 +20,6 @@ export class JobListing {
     
     @ManyToOne(() => Recruiter, (recruiter) =>recruiter.jobOffers)
     postedBy: Recruiter;
+    
 
 }

@@ -1,10 +1,10 @@
-import { Controller, Post, Body } from '@nestjs/common';
-import { SignUpdto } from './dto/auth.dto';
+import { Controller, Post, Body, UnauthorizedException, Res, HttpStatus, Get, Param } from '@nestjs/common';
+import { Signindto, SignUpdto } from './dto/auth.dto';
 import * as bcrypt from "bcrypt"
 import { AuthService } from './auth.service';
 import { User } from 'src/user/Entities/User.entity';
 
-
+import { Response } from 'express';
 
 
 function generateRandomNumberString(length) {
@@ -39,6 +39,47 @@ export class AuthController {
         const code = generateRandomNumberString(6);
         this.authService.send_email(code,user);
         return code;
+
+    }
+
+    @Post('sign')
+    async signin(@Body() signindto: Signindto, @Res() res: Response) {
+        const user=  await this.authService.find_user(signindto.email, signindto.password);
+        if (!user){
+            return res.status(HttpStatus.UNAUTHORIZED).json({
+                message: 'Auhtentifcation failed'
+            })
+        }
+        if (!user.verified) {
+            return false;
+        }
+
+        //Do logic to give back jwt
+    }
+
+    @Get('verify/:code')
+    async verify(@Param('code') code: number, email:string, password:string, @Res() res: Response){
+
+        // Need 
+        const user=  await this.authService.find_user(email, password);
+        if (!user){
+            return res.status(HttpStatus.UNAUTHORIZED).json({
+                message: 'Auhtentifcation failed'
+            })
+        }
+        if (user.verified) {
+            return true;
+        }
+
+        if (this.authService.verify_user(code, user))
+        {
+            // Update the user model
+
+            return this.authService.update_verified_status(user);
+
+        }
+        return false;
+
 
     }
 }

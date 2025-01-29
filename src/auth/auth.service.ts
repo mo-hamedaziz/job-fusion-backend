@@ -5,7 +5,7 @@ import { User } from 'src/user/Entities/User.entity';
 import { Repository } from 'typeorm';
 import * as nodemailer from 'nodemailer';
 import { Verification } from './Entities/verification_coes.entity';
-
+import * as bcrypt from 'bcrypt';
 @Injectable()
 export class AuthService {
     private transporter: any;
@@ -24,7 +24,6 @@ export class AuthService {
         })
     }
     
-
     //const {username, email, password, date_of_birth, Recruiter, PhoneNumber} = SignUpdto
 
     async add_user(username:string, email:string, password:string, date_of_birth:string,PhoneNumber:number): Promise<User> {
@@ -53,8 +52,6 @@ export class AuthService {
 
     }
 
-    
-
     async send_email(code: number,user:User): Promise<void> {
 
         const element = new Verification()
@@ -69,10 +66,38 @@ export class AuthService {
             to: user.email,
             subject: "Verification code",
             text: `Your verifcation code is ${code}`,
-   
         });
+    }
 
+    async find_user(email:string, password:string): Promise<User | void>{
 
+        const user:User = await this.userRepository.findOne({
+            where: {
+                email: email,
+            }
+        });
+        const match = await  bcrypt.compare(password, user.password);
+        if (!match) {
+            return 
+        }
+        return user
+    }
+
+    async verify_user(code:number, user:User): Promise<Boolean>{
+        const verified_code = await this.verificationRepository.findOne(
+            {
+                where: {userId: user.id,},
+                relations: ["user"]
+
+            }
+        )
+        return verified_code.code === code;
+    }
+
+    async update_verified_status(user:User): Promise<Boolean> {
+        user.verified = true;
+        return true;
+        
     }
 
 

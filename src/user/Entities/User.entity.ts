@@ -1,6 +1,7 @@
 import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Gender } from "./gender.enum";
 import { JobListing } from "src/recruiter/Entities/joblistings.entity";
+import { Recruiter } from "src/recruiter/Entities/recruiter.entity";
 
 @Entity('User')
 export class User {
@@ -19,11 +20,17 @@ export class User {
     @Column()
     date_of_birth: Date;
 
+    @Column()
+    phoneNumber: number;
+
     @Column({
         type: "enum",
         enum: Gender,
     })
     gender: Gender;
+
+    @Column({default: false})
+    verified: boolean;
 
 
     @ManyToMany(() => JobListing)
@@ -36,6 +43,12 @@ export class User {
 
     @Column({ nullable: true})
     photo: string;
+
+    @ManyToMany(() => Recruiter)
+    @JoinTable()
+    recruiters: Recruiter[]
+
+    
 
 
 }

@@ -4,9 +4,7 @@ export class SignUpdto {
     password: string;
     date_of_birth: string;
     Recruiter: boolean;
-    PhoneNumber: string;
-    Resume: string;
-    
+    PhoneNumber: number;    
 }
 
 

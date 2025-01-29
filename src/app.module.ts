@@ -6,7 +6,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
 import { RecruiterModule } from './recruiter/recruiter.module';
+import { Recruiter } from './recruiter/Entities/recruiter.entity';
+import { JobListing } from './recruiter/Entities/joblistings.entity';
+import { User } from './user/Entities/User.entity';
+require('dotenv').config()
 
+console.log(process.env.DATABASE_HOST)
 @Module({
   imports: [
     AuthModule,
@@ -15,11 +20,13 @@ import { RecruiterModule } from './recruiter/recruiter.module';
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: process.env.DATABASE_HOST,
-      port: Number(process.env.DATABASE_PORT),
-      username: process.env.DATABASE_USER,
-      database: process.env.DATABASE_NAME,
+      host: 'localhost',
+      port: 3306,
+      username: 'root',
+      password: 'aaa',
+      database: 'db_project',
       synchronize: true,
+      entities: [Recruiter,JobListing,User],
       autoLoadEntities: true,
 
     }),

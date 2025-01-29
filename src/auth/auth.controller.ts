@@ -44,17 +44,44 @@ export class AuthController {
 
     @Post('sign')
     async signin(@Body() signindto: Signindto, @Res() res: Response) {
+
         const user=  await this.authService.find_user(signindto.email, signindto.password);
-        if (!user){
+      
+        if (user) {
+            if (!user.verified) {
+                return false;
+         }
+            else {
+                const payload = {
+                 userid: user.id,
+                recruiter: false,
+        }
+            const token = this.authService.generateToken(payload);
+            //set cookies and such things
+            return token
+    }
+    }
+
+
+    const recruiter=  await this.authService.find_recruiter(signindto.email, signindto.password);
+        if (!recruiter){
             return res.status(HttpStatus.UNAUTHORIZED).json({
                 message: 'Auhtentifcation failed'
             })
         }
-        if (!user.verified) {
+        if (!recruiter.verified) {
             return false;
         }
+        else {
+        const payload = {
+            userid: recruiter.id,
+            recruiter: true,
+        }
+        const token = this.authService.generateToken(payload);
+        //set cookies and such things
+        return token
+    }
 
-        //Do logic to give back jwt
     }
 
     @Get('verify/:code')

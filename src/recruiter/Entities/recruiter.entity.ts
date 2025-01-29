@@ -21,6 +21,9 @@ export class Recruiter {
 
         @Column()
         phoneNumber: number;
+
+        @Column({default: false})
+        verified: boolean;
     
         @Column({
             type: "enum",

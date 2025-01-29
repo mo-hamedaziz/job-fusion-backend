@@ -6,11 +6,19 @@ import { Repository } from 'typeorm';
 import * as nodemailer from 'nodemailer';
 import { Verification } from './Entities/verification_coes.entity';
 import * as bcrypt from 'bcrypt';
+import { JwtPayload } from './dto/jwtpayload.interface';
+import * as jwt from 'jsonwebtoken';
+
+
+
+
 @Injectable()
 export class AuthService {
     private transporter: any;
+    private readonly jwtSecret = process.env.SECRET_JWT;
     constructor(@InjectRepository(User) private userRepository: Repository<User>,
                 @InjectRepository(Verification) private verificationRepository: Repository<Verification>,
+                @InjectRepository(Recruiter) private recruiterRepository: Repository<Recruiter>,
         ) {
         this.transporter = nodemailer.createTransport({
             host: "sandbox.smtp.mailtrap.io",
@@ -47,7 +55,7 @@ export class AuthService {
         recruiter.password = password;
         recruiter.date_of_birth =new Date(date_of_birth);
         recruiter.phoneNumber =  PhoneNumber;
-        await this.userRepository.save(recruiter);
+        await this.recruiterRepository.save(recruiter);
         return recruiter
 
     }
@@ -100,5 +108,44 @@ export class AuthService {
         
     }
 
+    async_find_user_id(id: string): Promise<User | null> {
+        const user =  this.userRepository.findOne({
+            where: {
+                id:id,
+            }
+        })
+        return user
 
-}
+    }
+
+    async_find_recruiter_id(id: string): Promise<Recruiter | null> {
+        const user =  this.recruiterRepository.findOne({
+            where: {
+                id:id,
+            }
+        })
+        return user
+    }
+
+    generateToken(payload: JwtPayload): string {
+        const token = jwt.sign(payload,this.jwtSecret, {
+            expiresIn:'2h',
+        })
+        return token;
+    }
+
+    async find_recruiter(email:string, password:string): Promise<Recruiter |null> {
+        const recruiter:Recruiter = await this.recruiterRepository.findOne({
+            where: {
+                email: email,
+            }
+        });
+        const match = await  bcrypt.compare(password, recruiter.password);
+        if (!match) {
+            return 
+        }
+        return recruiter
+    }
+        
+    }
+

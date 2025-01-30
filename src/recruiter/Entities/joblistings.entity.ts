@@ -1,24 +1,26 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Recruiter } from "./recruiter.entity";
-
-
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Recruiter } from './recruiter.entity';
 
 @Entity('JobListing')
 export class JobListing {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @PrimaryGeneratedColumn()
-    id: number;
+  @Column()
+  title: string;
 
-    @Column()
-    title: string;
+  @Column()
+  description: string;
 
-    @Column()
-    description: string;
+  @CreateDateColumn()
+  createdAt: Date;
 
-    @CreateDateColumn()
-    createdAt: Date;
-    
-    @ManyToOne(() => Recruiter, (recruiter) =>recruiter.jobOffers)
-    postedBy: Recruiter;
-
+  @ManyToOne(() => Recruiter, (recruiter) => recruiter.jobOffers)
+  postedBy: Recruiter;
 }

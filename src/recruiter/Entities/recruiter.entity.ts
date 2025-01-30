@@ -1,5 +1,4 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { Gender } from 'src/user/Entities/gender.enum';
 import { JobOffer } from 'src/job-offer/entities/job-offer.entity';
 
 @Entity('Recruiter')
@@ -25,11 +24,8 @@ export class Recruiter {
   @Column({ default: false })
   verified: boolean;
 
-  @Column({
-    type: 'enum',
-    enum: Gender,
-  })
-  gender: Gender;
+  @Column({})
+  gender: 'Male' | 'Female';
 
   @Column({ nullable: true })
   photo: string;

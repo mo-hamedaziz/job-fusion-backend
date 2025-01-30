@@ -9,7 +9,9 @@ import { RecruiterModule } from './recruiter/recruiter.module';
 import { Recruiter } from './recruiter/Entities/recruiter.entity';
 import { JobListing } from './recruiter/Entities/joblistings.entity';
 import { User } from './user/Entities/User.entity';
+import { JobOfferModule } from './job-offer/job-offer.module';
 import 'dotenv/config';
+import { JobOffer } from './job-offer/entities/job-offer.entity';
 
 console.log(process.env.DATABASE_HOST);
 @Module({
@@ -26,11 +28,12 @@ console.log(process.env.DATABASE_HOST);
       password: 'dev_pass123',
       database: 'jobFusionDB',
       synchronize: true,
-      entities: [Recruiter, JobListing, User],
+      entities: [Recruiter, JobListing, User, JobOffer],
       autoLoadEntities: true,
     }),
     UserModule,
     RecruiterModule,
+    JobOfferModule,
   ],
   controllers: [AppController],
   providers: [AppService],

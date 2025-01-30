@@ -1,0 +1,27 @@
+services:
+  mysql:
+    image: mysql
+    container_name: job_fusion_db
+    restart: on-failure
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass123
+      MYSQL_DATABASE: jobFusionDB
+      MYSQL_USER: dev_user123
+      MYSQL_PASSWORD: dev_pass123
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: mysql_admin
+    restart: on-failure
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+    ports:
+      - "8080:80"
+
+volumes:
+  mysql_data:

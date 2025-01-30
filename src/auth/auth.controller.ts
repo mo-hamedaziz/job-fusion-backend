@@ -1,17 +1,18 @@
-import { Controller, Post, Body, UnauthorizedException, Res, HttpStatus, Get, Param } from '@nestjs/common';
+import { Controller, Post, Body, UnauthorizedException, Res, HttpStatus, Get, Param, Req, UseGuards } from '@nestjs/common';
 import { Signindto, SignUpdto } from './dto/auth.dto';
 import * as bcrypt from "bcrypt"
 import { AuthService } from './auth.service';
 import { User } from 'src/user/Entities/User.entity';
 
-import { Response } from 'express';
+import { Response, Request } from 'express';
 import { Baseuser } from './Entities/abstract_user';
+import { AuthGuard } from '@nestjs/passport';
 
 
 function generateRandomNumberString(length) {
     let result = 0;
     for (let i = 0; i < length; i++) {
-      result += Math.floor(Math.random() * 10); // Generates a random number between 0 and 9
+      result += Math.floor(Math.random() * 100); // Generates a random number between 0 and 9
     }
     return result;
   }
@@ -45,7 +46,6 @@ export class AuthController {
     @Post('sign')
     async signin(@Body() signindto: Signindto, @Res() res: Response) {
 
-        console.log("aaa")
         const user=  await this.authService.find_user(signindto.email, signindto.password);
         if (user) {
             if (!user.verified) {
@@ -148,5 +148,7 @@ export class AuthController {
 
     }
 }
+
+
 
 }

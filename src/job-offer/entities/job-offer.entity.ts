@@ -55,9 +55,6 @@ export class JobOffer extends BaseEntity {
   @Column({ nullable: true })
   industry?: string;
 
-  @Column({ type: 'timestamp' })
-  postedDate: Date;
-
   @Column('simple-array', { nullable: true })
   responsibilities?: string[];
 

@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  InternalServerErrorException,
   Logger,
   NotFoundException,
 } from '@nestjs/common';
@@ -125,6 +126,29 @@ export class JobOfferService {
     } catch (error) {
       this.logger.error('Error deleting job offer', error.stack);
       throw new BadRequestException('Error deleting job offer');
+    }
+  }
+
+  async toggleActive(id: string): Promise<JobOffer> {
+    try {
+      const jobOffer = await this.jobOfferRepository.findOne({
+        where: { id },
+      });
+
+      if (!jobOffer) {
+        throw new NotFoundException(`Job offer with ID ${id} not found`);
+      }
+
+      jobOffer.active = !jobOffer.active;
+
+      return await this.jobOfferRepository.save(jobOffer);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new InternalServerErrorException(
+        `Failed to toggle active status for job offer with ID ${id}: ${error.message}`,
+      );
     }
   }
 }

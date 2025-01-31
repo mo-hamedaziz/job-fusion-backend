@@ -1,60 +1,39 @@
-import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Gender } from "./gender.enum";
-import { JobListing } from "src/recruiter/Entities/joblistings.entity";
-import { Recruiter } from "src/recruiter/Entities/recruiter.entity";
+
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { JobApplication } from "src/job-application/entities/job-application.entity";
 
-@Entity('User')
+@Entity('users')
 export class User {
-    @PrimaryGeneratedColumn("uuid")
-    id: string;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-    @Column()
-    email:string;
+  @Column({ type: 'varchar', unique: true })
+  email: string;
 
-    @Column()
-    username: string;
+  @Column({ type: 'varchar', unique: true })
+  username: string;
 
-    @Column()
-    password: string;
+  @Column({ type: 'varchar', select: false })
+  password: string;
 
-    @Column()
-    date_of_birth: Date;
+  @Column({ type: 'date' })
+  date_of_birth: Date;
 
-    @Column()
-    phoneNumber: string;
+  @Column({ type: 'varchar', nullable: true })
+  phoneNumber: string;
 
-    @Column({
-        type: "enum",
-        enum: Gender,
-    })
-    gender: Gender;
+  @Column({ type: 'enum', enum: ['Male', 'Female'] })
+  gender: 'Male' | 'Female';
 
-    @Column({default: false})
-    verified: boolean;
+  @Column({ type: 'boolean', default: false })
+  verified: boolean;
 
+  @Column({ type: 'varchar', nullable: true })
+  cv: string;
 
-    /*@ManyToMany(() => JobListing)
-    @JoinTable()
-    jobApplications: JobListing[];*/
+  @Column({ type: 'varchar', nullable: true })
+  photo: string;
 
-    
-    @Column({ nullable: true})
-    cv: string;
-
-    @Column({ nullable: true})
-    photo: string;
-
-    @ManyToMany(() => Recruiter)
-    @JoinTable()
-    recruiters: Recruiter[]
-
-    @OneToMany(() => JobApplication, (jobApplication) => jobApplication.user)
+  @OneToMany(() => JobApplication, (jobApplication) => jobApplication.user)
     jobApplications: JobApplication[];
-
-
-
-    
-
-
 }

@@ -7,6 +7,8 @@ import {
   Param,
   Delete,
   Query,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { JobOfferService } from './job-offer.service';
 import { CreateJobOfferDto } from './dto/create-job-offer.dto';
@@ -18,6 +20,7 @@ export class JobOfferController {
   constructor(private readonly jobOfferService: JobOfferService) {}
 
   @Post()
+  @HttpCode(HttpStatus.CREATED)
   async create(
     @Body() createJobOfferDto: CreateJobOfferDto,
   ): Promise<JobOffer> {
@@ -40,11 +43,13 @@ export class JobOfferController {
   }
 
   @Get(':id')
+  @HttpCode(HttpStatus.OK)
   async findOne(@Param('id') id: string): Promise<JobOffer> {
     return this.jobOfferService.findOne(id);
   }
 
   @Patch(':id')
+  @HttpCode(HttpStatus.OK)
   async update(
     @Param('id') id: string,
     @Body() updateJobOfferDto: UpdateJobOfferDto,
@@ -53,6 +58,7 @@ export class JobOfferController {
   }
 
   @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('id') id: string): Promise<void> {
     return this.jobOfferService.remove(id);
   }

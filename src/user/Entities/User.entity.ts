@@ -21,7 +21,7 @@ export class User {
     date_of_birth: Date;
 
     @Column()
-    phoneNumber: number;
+    phoneNumber: string;
 
     @Column({
         type: "enum",

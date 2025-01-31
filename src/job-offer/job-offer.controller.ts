@@ -1,34 +1,59 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { JobOfferService } from './job-offer.service';
 import { CreateJobOfferDto } from './dto/create-job-offer.dto';
 import { UpdateJobOfferDto } from './dto/update-job-offer.dto';
+import { JobOffer } from './entities/job-offer.entity';
 
 @Controller('job-offer')
 export class JobOfferController {
   constructor(private readonly jobOfferService: JobOfferService) {}
 
   @Post()
-  create(@Body() createJobOfferDto: CreateJobOfferDto) {
+  async create(
+    @Body() createJobOfferDto: CreateJobOfferDto,
+  ): Promise<JobOffer> {
     return this.jobOfferService.create(createJobOfferDto);
   }
 
   @Get()
-  findAll() {
+  async findAll(): Promise<JobOffer[]> {
+    return this.jobOfferService.findAll();
+  }
+
+  @Get()
+  async findByRecruiter(
+    @Query('recruiterId') recruiterId?: string,
+  ): Promise<JobOffer[]> {
+    if (recruiterId) {
+      return this.jobOfferService.findByRecruiter(recruiterId);
+    }
     return this.jobOfferService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.jobOfferService.findOne(+id);
+  async findOne(@Param('id') id: string): Promise<JobOffer> {
+    return this.jobOfferService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateJobOfferDto: UpdateJobOfferDto) {
-    return this.jobOfferService.update(+id, updateJobOfferDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updateJobOfferDto: UpdateJobOfferDto,
+  ): Promise<JobOffer> {
+    return this.jobOfferService.update(id, updateJobOfferDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.jobOfferService.remove(+id);
+  async remove(@Param('id') id: string): Promise<void> {
+    return this.jobOfferService.remove(id);
   }
 }

@@ -28,11 +28,6 @@ export class JobOfferController {
   }
 
   @Get()
-  async findAll(): Promise<JobOffer[]> {
-    return this.jobOfferService.findAll();
-  }
-
-  @Get()
   async findByRecruiter(
     @Query('recruiterId') recruiterId?: string,
   ): Promise<JobOffer[]> {

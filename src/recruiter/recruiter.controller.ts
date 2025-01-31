@@ -4,8 +4,8 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
-  Put,
 } from '@nestjs/common';
 import { RecruiterService } from './recruiter.service';
 import { CreateRecruiterDto } from 'src/recruiter/dto/create-recruiter.dto';
@@ -33,7 +33,7 @@ export class RecruiterController {
     return await this.recruiterService.findOne(id);
   }
 
-  @Put(':id')
+  @Patch(':id')
   async update(
     @Param('id') id: string,
     @Body() updateRecruiterDto: UpdateRecruiterDto,

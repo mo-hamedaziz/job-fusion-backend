@@ -5,6 +5,8 @@ import {
   Column,
   BaseEntity,
   ManyToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('job_offers')
@@ -76,4 +78,10 @@ export class JobOffer extends BaseEntity {
 
   @ManyToOne(() => Recruiter, (recruiter) => recruiter.jobOffers)
   recruiter: Recruiter;
+
+  @CreateDateColumn({ type: 'timestamp' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ type: 'timestamp' })
+  updatedAt: Date;
 }

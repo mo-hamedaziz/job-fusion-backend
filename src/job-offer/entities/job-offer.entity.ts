@@ -1,3 +1,4 @@
+import { JobApplication } from 'src/job-application/entities/job-application.entity';
 import { Recruiter } from 'src/recruiter/Entities/recruiter.entity';
 import {
   Entity,
@@ -7,6 +8,7 @@ import {
   ManyToOne,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
 
 @Entity('job_offers')
@@ -78,6 +80,9 @@ export class JobOffer extends BaseEntity {
 
   @ManyToOne(() => Recruiter, (recruiter) => recruiter.jobOffers)
   recruiter: Recruiter;
+
+  @OneToMany(() => JobApplication, (jobApplication) => jobApplication.jobOffer)
+  jobApplications: JobApplication[];
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;

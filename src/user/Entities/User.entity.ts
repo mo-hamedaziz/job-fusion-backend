@@ -1,7 +1,8 @@
-import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Gender } from "./gender.enum";
 import { JobListing } from "src/recruiter/Entities/joblistings.entity";
 import { Recruiter } from "src/recruiter/Entities/recruiter.entity";
+import { JobApplication } from "src/job-application/entities/job-application.entity";
 
 @Entity('User')
 export class User {
@@ -33,11 +34,11 @@ export class User {
     verified: boolean;
 
 
-    @ManyToMany(() => JobListing)
+    /*@ManyToMany(() => JobListing)
     @JoinTable()
-    jobApplications: JobListing[];
+    jobApplications: JobListing[];*/
 
-    //these will be the paths in the s3 storage
+    
     @Column({ nullable: true})
     cv: string;
 
@@ -47,6 +48,11 @@ export class User {
     @ManyToMany(() => Recruiter)
     @JoinTable()
     recruiters: Recruiter[]
+
+    @OneToMany(() => JobApplication, (jobApplication) => jobApplication.user)
+    jobApplications: JobApplication[];
+
+
 
     
 

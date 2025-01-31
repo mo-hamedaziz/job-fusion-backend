@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { JobOffer } from 'src/job-offer/entities/job-offer.entity';
 
 @Entity('Recruiter')
@@ -19,12 +26,12 @@ export class Recruiter {
   date_of_birth: Date;
 
   @Column()
-  phoneNumber: number;
+  phoneNumber: string;
 
   @Column({ default: false })
   verified: boolean;
 
-  @Column({})
+  @Column()
   gender: 'Male' | 'Female';
 
   @Column({ nullable: true })
@@ -32,4 +39,10 @@ export class Recruiter {
 
   @OneToMany(() => JobOffer, (jobOffer) => jobOffer.recruiter)
   jobOffers: JobOffer[];
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

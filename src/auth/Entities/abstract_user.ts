@@ -17,7 +17,7 @@ export abstract class Baseuser {
         date_of_birth: Date;
     
         @Column()
-        phoneNumber: number;
+        phoneNumber: string;
     
         @Column({
             type: "enum",

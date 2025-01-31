@@ -3,7 +3,7 @@ export class CreateRecruiterDto {
   username: string;
   password: string;
   date_of_birth: Date;
-  phoneNumber: number;
+  phoneNumber: string;
   verified?: boolean;
   gender: 'Male' | 'Female';
   photo?: string;

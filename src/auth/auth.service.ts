@@ -38,7 +38,7 @@ export class AuthService {
     email: string,
     password: string,
     date_of_birth: string,
-    PhoneNumber: number,
+    PhoneNumber: string,
   ): Promise<User> {
     const user = new User();
     user.username = username;
@@ -55,7 +55,7 @@ export class AuthService {
     email: string,
     password: string,
     date_of_birth: string,
-    PhoneNumber: number,
+    PhoneNumber: string,
   ): Promise<Recruiter> {
     const recruiter = new Recruiter();
     recruiter.username = username;

@@ -1,6 +1,5 @@
-
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { JobApplication } from "src/job-application/entities/job-application.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { JobApplication } from 'src/job-application/entities/job-application.entity';
 
 @Entity('users')
 export class User {
@@ -25,7 +24,12 @@ export class User {
   @Column({ type: 'varchar', nullable: true })
   region: string;
 
-  @Column({ type: 'varchar',nullable:true, default: '"Motivated professional seeking opportunities to learn, contribute, and grow in a dynamic environment' })
+  @Column({
+    type: 'varchar',
+    nullable: true,
+    default:
+      '"Motivated professional seeking opportunities to learn, contribute, and grow in a dynamic environment',
+  })
   summary: string;
 
   @Column({ type: 'varchar', nullable: true })
@@ -44,15 +48,14 @@ export class User {
   photo: string;
 
   @OneToMany(() => JobApplication, (jobApplication) => jobApplication.user)
-    jobApplications: JobApplication[];
+  jobApplications: JobApplication[];
 
-  @Column("simple-array")
+  @Column('simple-array')
   languages: string[];
 
-  @Column("simple-array")
+  @Column('simple-array')
   studies: string[];
 
-  @Column("simple-array")
+  @Column('simple-array')
   work_experiences: string[];
-
 }

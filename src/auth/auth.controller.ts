@@ -1,6 +1,6 @@
 import { Controller, Post, Body, UnauthorizedException, Res, HttpStatus, Get, Param, Req, UseGuards } from '@nestjs/common';
 import { Signindto, SignUpdto } from './dto/auth.dto';
-import * as bcrypt from "bcrypt"
+import * as bcrypt from 'bcrypt';
 import { AuthService } from './auth.service';
 import { User } from 'src/user/Entities/User.entity';
 
@@ -16,7 +16,6 @@ function generateRandomNumberString(length) {
     }
     return result;
   }
-
 
 @Controller('auth')
 export class AuthController {
@@ -102,8 +101,7 @@ export class AuthController {
         return res.status(HttpStatus.OK).json({message:'login succesfull'})
         
     }
-
-    }
+  }
 
     @Post('verify/:code')
     async verify(@Param('code') code: number, @Body() signindto: Signindto, @Res() res: Response){

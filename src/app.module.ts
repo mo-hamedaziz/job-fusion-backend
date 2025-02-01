@@ -7,11 +7,12 @@ import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
 import { RecruiterModule } from './recruiter/recruiter.module';
 import { Recruiter } from './recruiter/Entities/recruiter.entity';
-import { JobListing } from './recruiter/Entities/joblistings.entity';
 import { User } from './user/Entities/User.entity';
-require('dotenv').config()
+import { JobOfferModule } from './job-offer/job-offer.module';
+import 'dotenv/config';
+import { JobOffer } from './job-offer/entities/job-offer.entity';
 
-console.log(process.env.DATABASE_HOST)
+console.log(process.env.DATABASE_HOST);
 @Module({
   imports: [
     AuthModule,
@@ -22,16 +23,16 @@ console.log(process.env.DATABASE_HOST)
       type: 'mysql',
       host: 'localhost',
       port: 3306,
-      username: 'root',
-      password: 'aaa',
-      database: 'db_project',
+      username: 'dev_user123',
+      password: 'dev_pass123',
+      database: 'jobFusionDB',
       synchronize: true,
-      entities: [Recruiter,JobListing,User],
+      entities: [Recruiter, User, JobOffer],
       autoLoadEntities: true,
-
     }),
     UserModule,
     RecruiterModule,
+    JobOfferModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -15,8 +15,8 @@ import { Recruiter } from 'src/recruiter/Entities/recruiter.entity';
     JwtModule.register({
       secret: process.env.SECRET_JWT,
       signOptions: {
-        expiresIn: "2 days"
-      }
+        expiresIn: '2 days',
+      },
     }),
     TypeOrmModule.forFeature([Verification,User,Recruiter]),
     PassportModule.register({defaultStrategy: 'jwt'}),

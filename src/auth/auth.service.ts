@@ -16,25 +16,27 @@ import { IsInstance } from 'class-validator';
 
 @Injectable()
 export class AuthService {
-    private transporter: any;
-    private readonly jwtSecret = process.env.SECRET_JWT;
-    constructor(@InjectRepository(User) private userRepository: Repository<User>,
-                @InjectRepository(Verification) private verificationRepository: Repository<Verification>,
-                @InjectRepository(Recruiter) private recruiterRepository: Repository<Recruiter>,
-        ) {
-        this.transporter = nodemailer.createTransport({
-            host: "sandbox.smtp.mailtrap.io",
-            port: 2525,
-            secure: false,
-            auth: {
-                user: "8fb5d5a2213504",
-                pass: "afe7bfc37379d8",
-            },
+  private transporter: any;
+  private readonly jwtSecret = process.env.SECRET_JWT;
+  constructor(
+    @InjectRepository(User) private userRepository: Repository<User>,
+    @InjectRepository(Verification)
+    private verificationRepository: Repository<Verification>,
+    @InjectRepository(Recruiter)
+    private recruiterRepository: Repository<Recruiter>,
+  ) {
+    this.transporter = nodemailer.createTransport({
+      host: 'sandbox.smtp.mailtrap.io',
+      port: 2525,
+      secure: false,
+      auth: {
+        user: '8fb5d5a2213504',
+        pass: 'afe7bfc37379d8',
+      },
+    });
+  }
 
-        })
-    }
-    
-    //const {username, email, password, date_of_birth, Recruiter, PhoneNumber} = SignUpdto
+  //const {username, email, password, date_of_birth, Recruiter, PhoneNumber} = SignUpdto
 
     async add_user(username:string, email:string, password:string, date_of_birth:string,PhoneNumber:number): Promise<User> {
 
@@ -50,18 +52,22 @@ export class AuthService {
 
     }
 
-    async add_recruiter(username:string, email:string, password:string, date_of_birth:string,PhoneNumber:number): Promise<Recruiter> {
-
-        const recruiter = new Recruiter()
-        recruiter.username = username;
-        recruiter.email = email;
-        recruiter.password = password;
-        recruiter.date_of_birth =new Date(date_of_birth);
-        recruiter.phoneNumber =  PhoneNumber;
-        await this.recruiterRepository.save(recruiter);
-        return recruiter
-
-    }
+  async add_recruiter(
+    username: string,
+    email: string,
+    password: string,
+    date_of_birth: string,
+    PhoneNumber: string,
+  ): Promise<Recruiter> {
+    const recruiter = new Recruiter();
+    recruiter.username = username;
+    recruiter.email = email;
+    recruiter.password = password;
+    recruiter.date_of_birth = new Date(date_of_birth);
+    recruiter.phoneNumber = PhoneNumber;
+    await this.recruiterRepository.save(recruiter);
+    return recruiter;
+  }
 
     async send_email(code: number,user:Baseuser): Promise<void> {
 
@@ -70,13 +76,13 @@ export class AuthService {
         element.userId = user.id;
         this.verificationRepository.save(element)
 
-        const info = await this.transporter.sendMail({
-            from: '"Mailer" <youssef.rouissi@insat.ucar.tn>',
-            to: user.email,
-            subject: "Verification code",
-            text: `Your verifcation code is ${code}`,
-        });
-    }
+    const info = await this.transporter.sendMail({
+      from: '"Mailer" <youssef.rouissi@insat.ucar.tn>',
+      to: user.email,
+      subject: 'Verification code',
+      text: `Your verifcation code is ${code}`,
+    });
+  }
 
     async find_user(email:string, password:string): Promise<User | void>{
 
@@ -118,44 +124,44 @@ export class AuthService {
         
     }
 
-    async_find_user_id(id: string): Promise<User | null> {
-        const user =  this.userRepository.findOne({
-            where: {
-                id:id,
-            }
-        })
-        return user
+  async_find_user_id(id: string): Promise<User | null> {
+    const user = this.userRepository.findOne({
+      where: {
+        id: id,
+      },
+    });
+    return user;
+  }
 
-    }
+  async_find_recruiter_id(id: string): Promise<Recruiter | null> {
+    const user = this.recruiterRepository.findOne({
+      where: {
+        id: id,
+      },
+    });
+    return user;
+  }
 
-    async_find_recruiter_id(id: string): Promise<Recruiter | null> {
-        const user =  this.recruiterRepository.findOne({
-            where: {
-                id:id,
-            }
-        })
-        return user
-    }
+  generateToken(payload: JwtPayload): string {
+    const token = jwt.sign(payload, this.jwtSecret, {
+      expiresIn: '2h',
+    });
+    return token;
+  }
 
-    generateToken(payload: JwtPayload): string {
-        const token = jwt.sign(payload,this.jwtSecret, {
-            expiresIn:'2h',
-        })
-        return token;
+  async find_recruiter(
+    email: string,
+    password: string,
+  ): Promise<Recruiter | null> {
+    const recruiter: Recruiter = await this.recruiterRepository.findOne({
+      where: {
+        email: email,
+      },
+    });
+    const match = await bcrypt.compare(password, recruiter.password);
+    if (!match) {
+      return;
     }
-
-    async find_recruiter(email:string, password:string): Promise<Recruiter |null> {
-        const recruiter:Recruiter = await this.recruiterRepository.findOne({
-            where: {
-                email: email,
-            }
-        });
-        const match = await  bcrypt.compare(password, recruiter.password);
-        if (!match) {
-            return 
-        }
-        return recruiter
-    }
-        
-    }
-
+    return recruiter;
+  }
+}

@@ -1,28 +1,34 @@
-import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Gender } from "./gender.enum";
-import { JobListing } from "src/recruiter/Entities/joblistings.entity";
-import { Recruiter } from "src/recruiter/Entities/recruiter.entity";
-import { Baseuser } from "src/auth/Entities/abstract_user";
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('User')
-export class User extends Baseuser {
+@Entity('users')
+export class User {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-  
+  @Column({ type: 'varchar', unique: true })
+  email: string;
 
+  @Column({ type: 'varchar', unique: true })
+  username: string;
 
-    @ManyToMany(() => JobListing)
-    @JoinTable()
-    jobApplications: JobListing[];
+  @Column({ type: 'varchar', select: false })
+  password: string;
 
-    //these will be the paths in the s3 storage
-    @Column({ nullable: true})
-    cv: string;
+  @Column({ type: 'date' })
+  date_of_birth: Date;
 
-    @ManyToMany(() => Recruiter)
-    @JoinTable()
-    recruiters: Recruiter[]
+  @Column({ type: 'varchar', nullable: true })
+  phoneNumber: string;
 
-    
+  @Column({ type: 'enum', enum: ['Male', 'Female'] })
+  gender: 'Male' | 'Female';
 
+  @Column({ type: 'boolean', default: false })
+  verified: boolean;
 
+  @Column({ type: 'varchar', nullable: true })
+  cv: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  photo: string;
 }

@@ -5,6 +5,7 @@ export class SignUpdto {
   date_of_birth: string;
   Recruiter: boolean;
   PhoneNumber: string;
+  gender: 'Male' | 'Female';
 }
 
 export class Signindto {

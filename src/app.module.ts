@@ -12,6 +12,7 @@ import { JobOfferModule } from './job-offer/job-offer.module';
 import 'dotenv/config';
 import { JobOffer } from './job-offer/entities/job-offer.entity';
 import { JobApplicationModule } from './job-application/job-application.module';
+import { ProfileModule } from './profile/profile.module';
 
 console.log(process.env.DATABASE_HOST);
 @Module({
@@ -35,8 +36,11 @@ console.log(process.env.DATABASE_HOST);
     RecruiterModule,
     JobOfferModule,
     JobApplicationModule,
+    ProfileModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  
+}

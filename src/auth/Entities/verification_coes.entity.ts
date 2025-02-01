@@ -1,5 +1,6 @@
 import { User } from "src/user/Entities/User.entity";
 import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from "typeorm";
+import { Baseuser } from "./abstract_user";
 
 @Entity("verification")
 export class Verification {
@@ -9,7 +10,4 @@ export class Verification {
     @Column()
     code: number;
 
-    @OneToOne(() => User, { onDelete: "CASCADE" }) // One-to-One relationship with User
-    @JoinColumn({ name: "userId" }) // Defines the foreign key in Verification table
-    user: User;
 }

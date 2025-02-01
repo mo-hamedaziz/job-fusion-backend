@@ -8,6 +8,11 @@ import { Verification } from './Entities/verification_coes.entity';
 import * as bcrypt from 'bcrypt';
 import { JwtPayload } from './dto/jwtpayload.interface';
 import * as jwt from 'jsonwebtoken';
+import { Baseuser } from './Entities/abstract_user';
+import { IsInstance } from 'class-validator';
+
+
+
 
 @Injectable()
 export class AuthService {
@@ -33,22 +38,19 @@ export class AuthService {
 
   //const {username, email, password, date_of_birth, Recruiter, PhoneNumber} = SignUpdto
 
-  async add_user(
-    username: string,
-    email: string,
-    password: string,
-    date_of_birth: string,
-    PhoneNumber: string,
-  ): Promise<User> {
-    const user = new User();
-    user.username = username;
-    user.email = email;
-    user.password = password;
-    user.date_of_birth = new Date(date_of_birth);
-    user.phoneNumber = PhoneNumber;
-    await this.userRepository.save(user);
-    return user;
-  }
+    async add_user(username:string, email:string, password:string, date_of_birth:string,PhoneNumber:string): Promise<User> {
+
+        const user = new User()
+        user.username = username;
+        user.email = email;
+        user.password = password;
+        user.date_of_birth =new Date(date_of_birth);
+        user.phoneNumber =  PhoneNumber;
+        await this.userRepository.save(user);
+        console.log(user)
+        return user
+
+    }
 
   async add_recruiter(
     username: string,
@@ -67,13 +69,12 @@ export class AuthService {
     return recruiter;
   }
 
-  async send_email(code: number, user: User): Promise<void> {
-    const element = new Verification();
-    element.code = code;
-    element.user = user;
-    element.userId = user.id;
-    this.verificationRepository.save(element);
-    console.log(user.email);
+    async send_email(code: number,user:Baseuser): Promise<void> {
+
+        const element = new Verification()
+        element.code = code;
+        element.userId = user.id;
+        this.verificationRepository.save(element)
 
     const info = await this.transporter.sendMail({
       from: '"Mailer" <youssef.rouissi@insat.ucar.tn>',
@@ -83,31 +84,45 @@ export class AuthService {
     });
   }
 
-  async find_user(email: string, password: string): Promise<User | void> {
-    const user: User = await this.userRepository.findOne({
-      where: {
-        email: email,
-      },
-    });
-    const match = await bcrypt.compare(password, user.password);
-    if (!match) {
-      return;
+    async find_user(email:string, password:string): Promise<User | void>{
+
+        const user:User = await this.userRepository.findOne({
+            where: {
+                email: email,
+            }
+        });
+        if (!user) {
+            return 
+        }
+        const match = await  bcrypt.compare(password, user.password);
+        if (!match) {
+            return 
+        }
+        return user
     }
-    return user;
-  }
 
-  async verify_user(code: number, user: User): Promise<Boolean> {
-    const verified_code = await this.verificationRepository.findOne({
-      where: { userId: user.id },
-      relations: ['user'],
-    });
-    return verified_code.code === code;
-  }
+    async verify_user(code:number, user:User | Recruiter): Promise<Boolean>{
+        const verified_code = await this.verificationRepository.findOne(
+            {
+                where: {userId: user.id,}
+            }
+        )
+        console.log(verified_code)
+        console.log(code)
+        return verified_code.code == code;
+    }
 
-  async update_verified_status(user: User): Promise<Boolean> {
-    user.verified = true;
-    return true;
-  }
+    async update_verified_status(user:User | Recruiter): Promise<void> {
+        user.verified = true;
+        if ( user instanceof User){
+            await this.userRepository.save(user);
+        }
+        else {
+            await this.recruiterRepository.save(user)
+        }
+
+        
+    }
 
   async_find_user_id(id: string): Promise<User | null> {
     const user = this.userRepository.findOne({

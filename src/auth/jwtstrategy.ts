@@ -28,17 +28,16 @@ export class JWtStrategy extends PassportStrategy(Strategy) {
     async validate(payload: JwtPayload) {
         if (!payload.recruiter) {
         const user = await this.authService.async_find_user_id(payload.userid); // Fetch user by ID from DB
-
         if (!user) {
           throw new Error('Unauthorized'); // Handle unauthorized case
         }
         return user;  // Ret
     }
-    const recruiter = await this.authService.async_find_recruiter_id(payload.userid);
-    if (!recruiter) {
-        throw new Error('Unauthorized'); // Handle unauthorized case
-      }
-      return recruiter;  // Ret
+        const recruiter = await this.authService.async_find_recruiter_id(payload.userid);
+        if (!recruiter) {
+            throw new Error('Unauthorized'); // Handle unauthorized case
+        }
+        return recruiter;  // Ret
     }
 
         

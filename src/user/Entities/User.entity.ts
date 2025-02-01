@@ -1,6 +1,5 @@
-
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { JobApplication } from "src/job-application/entities/job-application.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { JobApplication } from 'src/job-application/entities/job-application.entity';
 
 @Entity('users')
 export class User {
@@ -35,5 +34,5 @@ export class User {
   photo: string;
 
   @OneToMany(() => JobApplication, (jobApplication) => jobApplication.user)
-    jobApplications: JobApplication[];
+  jobApplications: JobApplication[];
 }

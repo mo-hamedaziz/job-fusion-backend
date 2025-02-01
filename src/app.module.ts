@@ -13,7 +13,6 @@ import 'dotenv/config';
 import { JobOffer } from './job-offer/entities/job-offer.entity';
 import { JobApplicationModule } from './job-application/job-application.module';
 
-console.log(process.env.DATABASE_HOST);
 @Module({
   imports: [
     AuthModule,

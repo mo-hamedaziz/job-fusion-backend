@@ -92,6 +92,11 @@ export class ProfileController {
 
     }
 
+    @Get('user_data')
+    async getuser(@Req() req: AuthenticatedRequest,@Res() res: Response) {
+        return await this.profileService.get_user(req.user.userid);
+    }
+
 
 
 

@@ -92,8 +92,10 @@ export class ProfileService {
         user.languages = user.languages.filter(lang => lang !== language);
         await this.userService.save(user);
         return user.languages
+    }
 
-
+    async get_user(id: string) {
+        return this.userService.findOne(id);
     }
 
 

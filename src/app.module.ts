@@ -11,6 +11,7 @@ import { User } from './user/Entities/User.entity';
 import { JobOfferModule } from './job-offer/job-offer.module';
 import 'dotenv/config';
 import { JobOffer } from './job-offer/entities/job-offer.entity';
+import { JobApplicationModule } from './job-application/job-application.module';
 
 console.log(process.env.DATABASE_HOST);
 @Module({
@@ -22,7 +23,7 @@ console.log(process.env.DATABASE_HOST);
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
-      port: 3306,
+      port: 3307,
       username: 'dev_user123',
       password: 'dev_pass123',
       database: 'jobFusionDB',
@@ -33,6 +34,7 @@ console.log(process.env.DATABASE_HOST);
     UserModule,
     RecruiterModule,
     JobOfferModule,
+    JobApplicationModule,
   ],
   controllers: [AppController],
   providers: [AppService],

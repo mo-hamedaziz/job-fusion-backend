@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { JobApplication } from "src/job-application/entities/job-application.entity";
 
 @Entity('users')
 export class User {
@@ -31,4 +33,7 @@ export class User {
 
   @Column({ type: 'varchar', nullable: true })
   photo: string;
+
+  @OneToMany(() => JobApplication, (jobApplication) => jobApplication.user)
+    jobApplications: JobApplication[];
 }

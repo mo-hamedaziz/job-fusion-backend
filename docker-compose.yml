@@ -9,7 +9,7 @@ services:
       MYSQL_USER: dev_user123
       MYSQL_PASSWORD: dev_pass123
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - job_fusion_data:/var/lib/mysql
 

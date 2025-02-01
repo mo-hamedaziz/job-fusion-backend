@@ -2,11 +2,11 @@ import { Controller, Post, Body, UnauthorizedException, Res, HttpStatus, Get, Pa
 import { Signindto, SignUpdto } from './dto/auth.dto';
 import * as bcrypt from 'bcrypt';
 import { AuthService } from './auth.service';
-import { User } from 'src/user/Entities/User.entity';
 
 import { Response, Request } from 'express';
-import { Baseuser } from './Entities/abstract_user';
 import { AuthGuard } from '@nestjs/passport';
+import { AuthenticatedRequest } from './guards/AuthenticatedResponse';
+import { AuthCookieGuard } from './guards/user.guard';
 
 
 function generateRandomNumberString(length) {
@@ -28,7 +28,7 @@ export class AuthController {
         const {username, email, password, date_of_birth, Recruiter, PhoneNumber} = SignUpdto
         const salt = await bcrypt.genSalt();
         const password_crypted = await bcrypt.hash(password, salt)
-        let user: Baseuser;
+        let user;
         if (Recruiter == false) {
           user = await this.authService.add_user(username,email,password_crypted,date_of_birth,PhoneNumber)
         }
@@ -70,8 +70,6 @@ export class AuthController {
         }
 
     }
-    console.log('here')
-
     const recruiter=  await this.authService.find_recruiter(signindto.email, signindto.password);
     console.log(recruiter)
         if (!recruiter){
@@ -146,6 +144,16 @@ export class AuthController {
 
     }
 }
+
+  @UseGuards(AuthCookieGuard)
+  @Get('is_authenticated')
+  isAutehnticated(@Req() req:AuthenticatedRequest) {
+    if (req.user){
+      return req.user;
+    }
+  }
+
+
 
 
 

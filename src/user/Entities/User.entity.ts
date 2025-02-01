@@ -11,11 +11,20 @@ export class User {
   @Column({ type: 'varchar', unique: true })
   username: string;
 
-  @Column({ type: 'varchar', select: false })
+  @Column({ type: 'varchar' })
   password: string;
 
   @Column({ type: 'date' })
   date_of_birth: Date;
+
+  @Column({ type: 'varchar', nullable: true })
+  country: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  region: string;
+
+  @Column({ type: 'varchar',nullable:true, default: '"Motivated professional seeking opportunities to learn, contribute, and grow in a dynamic environment' })
+  summary: string;
 
   @Column({ type: 'varchar', nullable: true })
   phoneNumber: string;
@@ -31,4 +40,14 @@ export class User {
 
   @Column({ type: 'varchar', nullable: true })
   photo: string;
+
+  @Column("simple-array")
+  languages: string[];
+
+  @Column("simple-array")
+  studies: string[];
+
+  @Column("simple-array")
+  work_experiences: string[];
+
 }

@@ -4,13 +4,15 @@ import { JwtService } from "@nestjs/jwt";
 
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class AuthCookieGuard implements CanActivate {
 
-    constructor(private jwtService: JwtService) {}
+    constructor(private readonly jwtService: JwtService) {}
 
     canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
         const request = context.switchToHttp().getRequest();
-        const token = request.cookie['token']
+        console.log(request.cookies)
+        const token = request.cookies['token']
+        console.log(token)
         if (!token) {
             throw new UnauthorizedException('Invalid or expired token');
         }
@@ -22,9 +24,6 @@ export class AuthGuard implements CanActivate {
         } catch(error) {
             throw new UnauthorizedException('Invalid or expired token');
         }
-
-        //Do some logic to check if the token is good
-
 
     }
     

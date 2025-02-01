@@ -38,7 +38,7 @@ export class AuthService {
 
   //const {username, email, password, date_of_birth, Recruiter, PhoneNumber} = SignUpdto
 
-    async add_user(username:string, email:string, password:string, date_of_birth:string,PhoneNumber:number): Promise<User> {
+    async add_user(username:string, email:string, password:string, date_of_birth:string,PhoneNumber:string): Promise<User> {
 
         const user = new User()
         user.username = username;
@@ -101,7 +101,7 @@ export class AuthService {
         return user
     }
 
-    async verify_user(code:number, user:Baseuser): Promise<Boolean>{
+    async verify_user(code:number, user:User | Recruiter): Promise<Boolean>{
         const verified_code = await this.verificationRepository.findOne(
             {
                 where: {userId: user.id,}
@@ -112,7 +112,7 @@ export class AuthService {
         return verified_code.code == code;
     }
 
-    async update_verified_status(user:Baseuser): Promise<void> {
+    async update_verified_status(user:User | Recruiter): Promise<void> {
         user.verified = true;
         if ( user instanceof User){
             await this.userRepository.save(user);

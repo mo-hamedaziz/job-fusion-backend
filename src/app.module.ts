@@ -11,6 +11,7 @@ import { User } from './user/Entities/User.entity';
 import { JobOfferModule } from './job-offer/job-offer.module';
 import 'dotenv/config';
 import { JobOffer } from './job-offer/entities/job-offer.entity';
+import { ProfileModule } from './profile/profile.module';
 
 console.log(process.env.DATABASE_HOST);
 @Module({
@@ -23,9 +24,9 @@ console.log(process.env.DATABASE_HOST);
       type: 'mysql',
       host: 'localhost',
       port: 3306,
-      username: 'dev_user123',
-      password: 'dev_pass123',
-      database: 'jobFusionDB',
+      username: 'root',
+      password: 'aaa',
+      database: 'db_project',
       synchronize: true,
       entities: [Recruiter, User, JobOffer],
       autoLoadEntities: true,
@@ -33,6 +34,7 @@ console.log(process.env.DATABASE_HOST);
     UserModule,
     RecruiterModule,
     JobOfferModule,
+    ProfileModule,
   ],
   controllers: [AppController],
   providers: [AppService],

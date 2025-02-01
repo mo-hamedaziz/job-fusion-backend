@@ -24,6 +24,6 @@ import { Recruiter } from 'src/recruiter/Entities/recruiter.entity';
   ],
   controllers: [AuthController],
   providers: [AuthService, JWtStrategy],
-  exports: [AuthService, JWtStrategy]
+  exports: [AuthService, JWtStrategy,JwtModule]
 })
 export class AuthModule {}

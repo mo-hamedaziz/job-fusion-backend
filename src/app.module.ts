@@ -23,7 +23,7 @@ console.log(process.env.DATABASE_HOST);
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
-      port: 3306,
+      port: 3307,
       username: 'dev_user123',
       password: 'dev_pass123',
       database: 'jobFusionDB',

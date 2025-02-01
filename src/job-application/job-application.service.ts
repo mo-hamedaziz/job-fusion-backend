@@ -1,15 +1,16 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { JobApplication } from '../entities/job-application.entity';
 import { CreateJobApplicationDto } from './dto/create-job-application.dto';
 import { UpdateJobApplicationDto } from './dto/update-job-application.dto';
+import { JobApplication } from './entities/job-application.entity';
 
 @Injectable()
 export class JobApplicationService {
   constructor(
     @InjectRepository(JobApplication)
-    private readonly jobApplicationRepository: Repository<JobApplication>,
+    private readonly jobApplicationRepository: Repository<JobApplication>, 
+    
   ) {}
 
   async create(createJobApplicationDto: CreateJobApplicationDto): Promise<JobApplication> {

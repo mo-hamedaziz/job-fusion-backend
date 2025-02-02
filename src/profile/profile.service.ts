@@ -93,7 +93,11 @@ export class ProfileService {
         await this.userService.save(user);
         return user.languages
 
+    }
 
+    async Get_User(id:string) {
+
+        return await this.userService.findOne(id);
     }
 
 

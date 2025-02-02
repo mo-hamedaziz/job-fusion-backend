@@ -41,13 +41,13 @@ export class User {
   @Column({ type: 'varchar', nullable: true })
   photo: string;
 
-  @Column("simple-array")
+  @Column("simple-array",{ nullable: true })
   languages: string[];
 
-  @Column("simple-array")
+  @Column("simple-array",{ nullable: true })
   studies: string[];
 
-  @Column("simple-array")
+  @Column("simple-array",{ nullable: true})
   work_experiences: string[];
 
 }

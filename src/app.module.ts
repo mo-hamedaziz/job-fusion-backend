@@ -22,11 +22,11 @@ import { ProfileModule } from './profile/profile.module';
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
-      port: 3307,
-      username: 'dev_user123',
-      password: 'dev_pass123',
-      database: 'jobFusionDB',
+      host: process.env.DB_HOST,
+      port: +process.env.DB_PORT,
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_DATABASE,
       synchronize: true,
       entities: [Recruiter, User, JobOffer],
       autoLoadEntities: true,
@@ -40,6 +40,4 @@ import { ProfileModule } from './profile/profile.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {
-  
-}
+export class AppModule {}

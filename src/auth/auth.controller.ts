@@ -91,7 +91,7 @@ export class AuthController {
         console.log(token);
         res.cookie('token', token, {
           maxAge: 1000 * 60 * 30,
-          httpOnly: true,
+          httpOnly: false,
           sameSite: 'none',
           secure: true,
         });
@@ -122,7 +122,7 @@ export class AuthController {
 
       res.cookie('token', token, {
         maxAge: 1000 * 60 * 30,
-        httpOnly: true,
+        httpOnly: false,
         sameSite: 'none',
         secure: true,
       });

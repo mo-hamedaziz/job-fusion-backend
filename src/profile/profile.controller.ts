@@ -92,6 +92,15 @@ export class ProfileController {
 
     }
 
+    @Get('all_info')
+    async getUser( @Req() req: AuthenticatedRequest) {
+        const user:User= await this.profileService.Get_User(req.user.userid);
+        const { password, ...userWithoutPassword } = user;
+         return userWithoutPassword;
+    }
+
+    
+
 
 
 

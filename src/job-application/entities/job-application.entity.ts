@@ -31,5 +31,10 @@ export class JobApplication {
   @ManyToOne(() => JobOffer, (jobOffer) => jobOffer.jobApplications)
   jobOffer: JobOffer;
 
+  @Column({type: 'enum', enum: ['pending','accepted','rejected'], default: 'pending'})
+  status: 'pending' | 'accepted' | 'rejected';
+
+  
+
 
 }

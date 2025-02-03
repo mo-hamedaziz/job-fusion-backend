@@ -13,6 +13,8 @@ import 'dotenv/config';
 import { JobOffer } from './job-offer/entities/job-offer.entity';
 import { JobApplicationModule } from './job-application/job-application.module';
 import { ProfileModule } from './profile/profile.module';
+import { NotificationsModule } from './notifications/notifications.module';
+import { JobApplication } from './job-application/entities/job-application.entity';
 
 @Module({
   imports: [
@@ -22,13 +24,13 @@ import { ProfileModule } from './profile/profile.module';
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: process.env.DB_HOST,
-      port: +process.env.DB_PORT,
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,
+      host: 'localhost',
+      port: 3306,
+      username: 'root',
+      password: 'aaa',
+      database: 'db_project',
       synchronize: true,
-      entities: [Recruiter, User, JobOffer],
+      entities: [Recruiter, User, JobOffer, JobApplication],
       autoLoadEntities: true,
     }),
     UserModule,
@@ -36,6 +38,7 @@ import { ProfileModule } from './profile/profile.module';
     JobOfferModule,
     JobApplicationModule,
     ProfileModule,
+    NotificationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

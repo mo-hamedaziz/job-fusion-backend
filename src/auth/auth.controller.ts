@@ -10,7 +10,7 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { Signindto, SignUpdto } from './dto/auth.dto';
+import { SignInDto, SignUpDto } from './dto/auth.dto';
 import * as bcrypt from 'bcrypt';
 import { AuthService } from './auth.service';
 
@@ -32,36 +32,42 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('signup')
-  async login(@Body() SignUpdto: SignUpdto) {
+  async login(@Body() SignUpDto: SignUpDto) {
     //Add an email to confirm registration
     const {
+      firstName,
+      lastName,
       username,
       email,
       password,
-      date_of_birth,
+      dateOfBirth,
       Recruiter,
-      PhoneNumber,
+      phoneNumber,
       gender,
-    } = SignUpdto;
+    } = SignUpDto;
     const salt = await bcrypt.genSalt();
     const password_crypted = await bcrypt.hash(password, salt);
     let user;
     if (Recruiter == false) {
       user = await this.authService.add_user(
+        firstName,
+        lastName,
         username,
         email,
         password_crypted,
-        date_of_birth,
-        PhoneNumber,
+        dateOfBirth,
+        phoneNumber,
         gender,
       );
     } else {
       user = await this.authService.add_recruiter(
+        firstName,
+        lastName,
         username,
         email,
         password_crypted,
-        date_of_birth,
-        PhoneNumber,
+        dateOfBirth,
+        phoneNumber,
         gender,
       );
     }
@@ -72,10 +78,10 @@ export class AuthController {
   }
 
   @Post('sign')
-  async signin(@Body() signindto: Signindto, @Res() res: Response) {
+  async signin(@Body() SignInDto: SignInDto, @Res() res: Response) {
     const user = await this.authService.find_user(
-      signindto.email,
-      signindto.password,
+      SignInDto.email,
+      SignInDto.password,
     );
     if (user) {
       if (!user.verified) {
@@ -100,8 +106,8 @@ export class AuthController {
       }
     }
     const recruiter = await this.authService.find_recruiter(
-      signindto.email,
-      signindto.password,
+      SignInDto.email,
+      SignInDto.password,
     );
     console.log(recruiter);
     if (!recruiter) {
@@ -134,12 +140,12 @@ export class AuthController {
   @Post('verify/:code')
   async verify(
     @Param('code') code: number,
-    @Body() signindto: Signindto,
+    @Body() SignInDto: SignInDto,
     @Res() res: Response,
   ) {
     const user = await this.authService.find_user(
-      signindto.email,
-      signindto.password,
+      SignInDto.email,
+      SignInDto.password,
     );
     console.log(user);
     if (user) {
@@ -160,8 +166,8 @@ export class AuthController {
       });
     } else {
       const recruiter = await this.authService.find_recruiter(
-        signindto.email,
-        signindto.password,
+        SignInDto.email,
+        SignInDto.password,
       );
       if (recruiter.verified) {
         return res.status(HttpStatus.ACCEPTED).json({

@@ -11,6 +11,8 @@ import { Recruiter } from 'src/recruiter/Entities/recruiter.entity';
 import { JobOffer } from './entities/job-offer.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { JobApplication } from 'src/job-application/entities/job-application.entity';
+import { User } from 'src/user/Entities/User.entity';
 
 @Injectable()
 export class JobOfferService {
@@ -22,6 +24,9 @@ export class JobOfferService {
 
     @InjectRepository(Recruiter)
     private readonly recruiterRepository: Repository<Recruiter>,
+
+    @InjectRepository(JobApplication)
+    private readonly jobapplicationsRepository: Repository<JobApplication>,
   ) {}
 
   async create(createJobOfferDto: CreateJobOfferDto): Promise<JobOffer> {
@@ -151,4 +156,7 @@ export class JobOfferService {
       );
     }
   }
-}
+
+
+
+  }

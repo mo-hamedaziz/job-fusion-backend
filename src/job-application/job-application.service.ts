@@ -38,4 +38,24 @@ export class JobApplicationService {
     await this.findOne(id); // Ensure it exists
     await this.jobApplicationRepository.delete(id);
   }
+
+
+  async findApplicants(id:string): Promise<JobApplication [] | void> {
+
+    const jobApps: JobApplication[] = await this.jobApplicationRepository.find({
+      where: {jobOffer: {id:id},
+               status: 'pending', 
+                },
+      relations: ['user']
+    })
+
+    return jobApps
+}
+
+async update_status(job_application: JobApplication, status: "accepted" | "rejected"):Promise<void> {
+  job_application.status = status;
+  await this.jobApplicationRepository.save(job_application);
+
+}
+
 }

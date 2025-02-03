@@ -12,18 +12,19 @@ import { Recruiter } from 'src/recruiter/Entities/recruiter.entity';
 
 @Module({
   imports: [
-    JwtModule.register({
-      secret: process.env.SECRET_JWT,
-      signOptions: {
-        expiresIn: '2 days',
-      },
-    }),
-    TypeOrmModule.forFeature([Verification,User,Recruiter]),
-    PassportModule.register({defaultStrategy: 'jwt'}),
-    UserModule
+    // JwtModule.register({
+    //   secret: "secret", //process.env.SECRET_JWT,
+    //   signOptions: {
+    //     expiresIn: '2 days',
+    //   },
+    // }),
+    JwtModule,
+    TypeOrmModule.forFeature([Verification, User, Recruiter]),
+    PassportModule.register({ defaultStrategy: 'jwt' }),
+    UserModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, JWtStrategy],
-  exports: [AuthService, JWtStrategy,JwtModule]
+  exports: [AuthService, JWtStrategy, JwtModule],
 })
 export class AuthModule {}

@@ -78,7 +78,11 @@ export class JobOffer extends BaseEntity {
   @ManyToOne(() => Recruiter, (recruiter) => recruiter.jobOffers)
   recruiter: Recruiter;
 
-  @OneToMany(() => JobApplication, (jobApplication) => jobApplication.jobOffer)
+  @OneToMany(
+    () => JobApplication,
+    (jobApplication) => jobApplication.jobOffer,
+    { nullable: false, onDelete: 'CASCADE' },
+  )
   jobApplications: JobApplication[];
 
   @CreateDateColumn({ type: 'timestamp' })

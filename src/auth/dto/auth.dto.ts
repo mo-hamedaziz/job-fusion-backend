@@ -1,14 +1,40 @@
-export class SignUpdto {
-    username : string;
-    email:string;
-    password: string;
-    date_of_birth: string;
-    Recruiter: boolean;
-    PhoneNumber: string;    
+import { IsString, IsEmail, IsBoolean, IsOptional } from 'class-validator';
+
+export class SignUpDto {
+  @IsString()
+  firstName: string;
+
+  @IsString()
+  lastName: string;
+
+  @IsString()
+  username: string;
+
+  @IsEmail()
+  email: string;
+
+  @IsString()
+  password: string;
+
+  @IsOptional()
+  @IsString()
+  dateOfBirth?: string;
+
+  @IsOptional()
+  @IsString()
+  phoneNumber?: string;
+
+  @IsOptional()
+  gender?: 'Male' | 'Female';
+
+  @IsBoolean()
+  Recruiter: boolean;
 }
 
+export class SignInDto {
+  @IsEmail()
+  email: string;
 
-export class Signindto {
-    email: string;
-    password: string;
-} 
+  @IsString()
+  password: string;
+}

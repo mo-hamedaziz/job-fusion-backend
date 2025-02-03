@@ -98,7 +98,10 @@ export class ProfileService {
 
     async Get_User(id:string) {
 
-        return await this.userService.findOne(id);
+        const user:User = await this.userService.findOne(id);
+        console.log(user)
+
+        return user
     }
 
 

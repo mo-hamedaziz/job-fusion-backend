@@ -14,8 +14,8 @@ import { JobOffer } from './job-offer/entities/job-offer.entity';
 import { JobApplicationModule } from './job-application/job-application.module';
 import { ProfileModule } from './profile/profile.module';
 import { NotificationsModule } from './notifications/notifications.module';
+import { JobApplication } from './job-application/entities/job-application.entity';
 
-console.log(process.env.DATABASE_HOST);
 @Module({
   imports: [
     AuthModule,
@@ -25,12 +25,12 @@ console.log(process.env.DATABASE_HOST);
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
-      port: 3307,
-      username: 'dev_user123',
-      password: 'dev_pass123',
-      database: 'jobFusionDB',
+      port: 3306,
+      username: 'root',
+      password: 'aaa',
+      database: 'db_project',
       synchronize: true,
-      entities: [Recruiter, User, JobOffer],
+      entities: [Recruiter, User, JobOffer, JobApplication],
       autoLoadEntities: true,
     }),
     UserModule,
@@ -43,6 +43,4 @@ console.log(process.env.DATABASE_HOST);
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {
-  
-}
+export class AppModule {}

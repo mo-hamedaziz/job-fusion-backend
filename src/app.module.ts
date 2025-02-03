@@ -15,6 +15,8 @@ import { JobApplicationModule } from './job-application/job-application.module';
 import { ProfileModule } from './profile/profile.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { JobApplication } from './job-application/entities/job-application.entity';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -33,6 +35,11 @@ import { JobApplication } from './job-application/entities/job-application.entit
       entities: [Recruiter, User, JobOffer, JobApplication],
       autoLoadEntities: true,
     }),
+    ThrottlerModule.forRoot([{
+      ttl: 15000,
+      limit: 1,
+}])
+    ,
     UserModule,
     RecruiterModule,
     JobOfferModule,

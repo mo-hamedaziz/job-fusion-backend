@@ -10,16 +10,22 @@ import { UserModule } from 'src/user/user.module';
 import { Recruiter } from 'src/recruiter/Entities/recruiter.entity';
 import { RecruiterService } from 'src/recruiter/recruiter.service';
 import { UserService } from 'src/user/user.service';
+import { APP_GUARD } from '@nestjs/core';
+import { ThrottlerGuard } from '@nestjs/throttler';
 
 @Module({
   controllers: [ProfileController],
-  providers: [ProfileService,RecruiterService,UserService],
+  providers: [ProfileService,RecruiterService,UserService, {
+    provide: APP_GUARD,
+    useClass: ThrottlerGuard
+  }],
   imports:[AuthModule,MulterModule.register({
     limits:{fieldNameSize:70}
      }),
           TypeOrmModule.forFeature([User,Recruiter]),
           RecruiterModule,
           UserModule
+         
     ],
 })
 export class ProfileModule {}

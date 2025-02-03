@@ -10,6 +10,7 @@ import { Recruiter } from 'src/recruiter/Entities/recruiter.entity';
 import { CvValidatorPipe } from './pipes/CvUpload.pipe';
 import { UpdateUserDto } from 'src/user/dto/update_user.dto';
 import { User } from 'src/user/Entities/User.entity';
+import { SkipThrottle, Throttle } from '@nestjs/throttler';
 
 
 @UseGuards(AuthCookieGuard)
@@ -17,6 +18,10 @@ import { User } from 'src/user/Entities/User.entity';
 export class ProfileController {
     constructor(private readonly profileService : ProfileService) {}
 
+
+    @Throttle({
+        standard: { limit: 1, ttl: 15000 }, 
+      })
     @Post('upload_photo')
     @UseInterceptors(FileInterceptor('file'))
     async UploadPhoto(@UploadedFile(new PhotoValidationPipe()) file: Express.Multer.File, @Req()req : AuthenticatedRequest,  @Res() res:Response) {
@@ -28,6 +33,8 @@ export class ProfileController {
 
     }
 
+
+    @Throttle({default: { limit: 1, ttl: 15000 }})
     @Post('cv_upload')
     @UseInterceptors(FileInterceptor('file'))
     async UploadCV(@UploadedFile(new CvValidatorPipe()) file:Express.Multer.File, @Req()req : AuthenticatedRequest,  @Res() res:Response) {
@@ -75,6 +82,7 @@ export class ProfileController {
     }
     }
 
+    @SkipThrottle()
     @Patch('update')
     async updateProfile(@Req() req: AuthenticatedRequest, @Body()updateUserDto:UpdateUserDto, @Res() res: Response) {
         console.log(updateUserDto)
@@ -85,6 +93,8 @@ export class ProfileController {
         return res.status(500).json({message: 'Error Updtng user'})
     }
 
+    @SkipThrottle()
+
     @Delete('remove_language/:lang')
     async delete(@Param('lang') language: string, @Req() req: AuthenticatedRequest, @Res() res: Response){
         const langs: string[] = await this.profileService.remove_lang(req.user.userid,language);
@@ -92,11 +102,19 @@ export class ProfileController {
 
     }
 
+    @SkipThrottle()
+
     @Get('all_info')
     async getUser( @Req() req: AuthenticatedRequest) {
         const user:User= await this.profileService.Get_User(req.user.userid);
         const { password, ...userWithoutPassword } = user;
          return userWithoutPassword;
+    }
+
+    @Throttle({default: { limit: 1, ttl: 15000 }})
+    @Get('throtle')
+    aaaa() {
+        return '2'
     }
 
     

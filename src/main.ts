@@ -1,7 +1,9 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as dotenv from 'dotenv';
-import * as cookieParser from 'cookie-parser'
+import * as cookieParser from 'cookie-parser';
+import { ThrottlerGuard } from '@nestjs/throttler';
+
 
 
 
@@ -15,7 +17,6 @@ async function bootstrap() {
     credentials: true,
   });
   app.use(cookieParser());
-
   await app.listen(3000);
 }
 bootstrap();

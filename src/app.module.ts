@@ -13,6 +13,7 @@ import 'dotenv/config';
 import { JobOffer } from './job-offer/entities/job-offer.entity';
 import { JobApplicationModule } from './job-application/job-application.module';
 import { ProfileModule } from './profile/profile.module';
+import { NotificationsModule } from './notifications/notifications.module';
 
 console.log(process.env.DATABASE_HOST);
 @Module({
@@ -37,6 +38,7 @@ console.log(process.env.DATABASE_HOST);
     JobOfferModule,
     JobApplicationModule,
     ProfileModule,
+    NotificationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

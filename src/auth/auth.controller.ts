@@ -41,14 +41,14 @@ export class AuthController {
       email,
       password,
       dateOfBirth,
-      Recruiter,
+      isRecruiter,
       phoneNumber,
       gender,
     } = SignUpDto;
     const salt = await bcrypt.genSalt();
     const password_crypted = await bcrypt.hash(password, salt);
     let user;
-    if (Recruiter == false) {
+    if (isRecruiter == false) {
       user = await this.authService.add_user(
         firstName,
         lastName,

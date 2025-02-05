@@ -28,7 +28,7 @@ export class SignUpDto {
   gender?: 'Male' | 'Female';
 
   @IsBoolean()
-  Recruiter: boolean;
+  isRecruiter: boolean;
 }
 
 export class SignInDto {

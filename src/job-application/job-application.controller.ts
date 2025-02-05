@@ -79,8 +79,11 @@ export class JobApplicationController {
   
     }
 
-
-
+    @Get('AllApplications')
+    async Allapplications(@Req()req: AuthenticatedRequest) {
+      const Recruiter_id: string = req.user.userid;
+      return this.jobApplicationService.getallApplications(Recruiter_id)
+    }
 
 
 }

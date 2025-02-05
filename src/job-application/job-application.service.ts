@@ -80,4 +80,18 @@ async update_status(job_application: JobApplication, status: "accepted" | "rejec
 
 }
 
+async getallApplications(id: string) {
+  return this.jobApplicationRepository.find({
+    where: {
+      jobOffer: {
+        recruiter: {
+          id: id,
+        },
+      },
+    },
+    relations: ['jobOffer', 'user'], // Add relations as needed
+  });
+
+}
+
 }

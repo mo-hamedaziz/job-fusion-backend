@@ -5,6 +5,7 @@ import { CreateJobApplicationDto } from './dto/create-job-application.dto';
 import { UpdateJobApplicationDto } from './dto/update-job-application.dto';
 import { JobApplication } from './entities/job-application.entity';
 import { User } from 'src/user/Entities/User.entity';
+import { JobOffer } from 'src/job-offer/entities/job-offer.entity';
 
 
 @Injectable()
@@ -14,6 +15,8 @@ export class JobApplicationService {
     private readonly jobApplicationRepository: Repository<JobApplication>, 
     @InjectRepository(User)
     private readonly userRepository: Repository<User>, 
+    @InjectRepository(JobOffer)
+    private readonly jobofferRepository: Repository<JobOffer>, 
     
   ) {}
 
@@ -26,11 +29,17 @@ export class JobApplicationService {
     if (!userr) {
       throw new NotFoundException('user not found');
     }
+    const job_offer = await this.jobofferRepository.findOne({
+      where: { id: createJobApplicationDto.jobOfferId},
+    })
     
-    const jobApplication = this.jobApplicationRepository.create({...createJobApplicationDto, user: userr});
+    if(!job_offer){
+      throw new NotFoundException('Job Offer not found');
+    }
+
+    const jobApplication = this.jobApplicationRepository.create({...createJobApplicationDto, user: userr, jobOffer: job_offer,});
     return this.jobApplicationRepository.save(jobApplication);
   }
-
   async findAll(): Promise<JobApplication[]> {
     return await this.jobApplicationRepository.find();
   }

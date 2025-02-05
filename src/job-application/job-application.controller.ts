@@ -19,7 +19,9 @@ export class JobApplicationController {
   if (!req.user) {
     throw new UnauthorizedException('User not authenticated');
   }
+  
   console.log(req.user.userid);
+  console.log(createJobApplicationDto);
   await this.jobApplicationService.create(createJobApplicationDto, req.user.userid);
   return res.status(HttpStatus.CREATED).json({message:'job application submitted'})
 }

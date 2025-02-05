@@ -32,10 +32,16 @@ export class JobOfferController {
 
   @UseGuards(AuthCookieGuard)
   @Get()
+  async findAll(): Promise<JobOffer[]> {
+    return this.jobOfferService.findAll();
+  }
+
+  @UseGuards(AuthCookieGuard)
+  @Get('recruiter')
   async findByRecruiter(@Req() req:AuthenticatedRequest): Promise<JobOffer[]> {
-    const recruiterID= req.user.userid;
-    if (recruiterID) {
-      return this.jobOfferService.findByRecruiter(recruiterID);
+    const userId= req.user.userid;
+    if (userId) {
+      return this.jobOfferService.findByRecruiter(userId);
     }
     return this.jobOfferService.findAll();
   }

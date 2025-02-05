@@ -32,22 +32,26 @@ export class AuthService {
     });
   }
 
-  //const {username, email, password, date_of_birth, Recruiter, PhoneNumber} = SignUpdto
+  //const {username, email, password, dateOfBirth, Recruiter, phoneNumber} = SignUpDto
 
   async add_user(
+    firstName: string,
+    lastName: string,
     username: string,
     email: string,
     password: string,
-    date_of_birth: string,
-    PhoneNumber: string,
+    dateOfBirth: string,
+    phoneNumber: string,
     gender: 'Male' | 'Female',
   ): Promise<User> {
     const user = new User();
+    user.firstName = firstName;
+    user.lastName = lastName;
     user.username = username;
     user.email = email;
     user.password = password;
-    user.date_of_birth = new Date(date_of_birth);
-    user.phoneNumber = PhoneNumber;
+    user.dateOfBirth = new Date(dateOfBirth);
+    user.phoneNumber = phoneNumber;
     user.gender = gender;
     await this.userRepository.save(user);
     console.log(user);
@@ -55,20 +59,25 @@ export class AuthService {
   }
 
   async add_recruiter(
+    firstName: string,
+    lastName: string,
     username: string,
     email: string,
     password: string,
-    date_of_birth: string,
-    PhoneNumber: string,
+    dateOfBirth: string,
+    phoneNumber: string,
     gender: 'Male' | 'Female',
   ): Promise<Recruiter> {
     const recruiter = new Recruiter();
+    recruiter.firstName = firstName;
+    recruiter.lastName = lastName;
     recruiter.username = username;
     recruiter.email = email;
     recruiter.password = password;
-    recruiter.date_of_birth = new Date(date_of_birth);
-    recruiter.phoneNumber = PhoneNumber;
+    recruiter.dateOfBirth = new Date(dateOfBirth);
+    recruiter.phoneNumber = phoneNumber;
     recruiter.gender = gender;
+    console.log(recruiter);
     await this.recruiterRepository.save(recruiter);
     return recruiter;
   }

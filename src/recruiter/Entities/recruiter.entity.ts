@@ -8,34 +8,45 @@ import {
 } from 'typeorm';
 import { JobOffer } from 'src/job-offer/entities/job-offer.entity';
 
+// export enum Gender {
+//   Male = 'Male',
+//   Female = 'Female',
+// }
+
 @Entity('Recruiter')
 export class Recruiter {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ type: 'varchar' })
+  firstName: string;
+
+  @Column({ type: 'varchar' })
+  lastName: string;
+
+  @Column({ type: 'varchar', unique: true })
   email: string;
 
-  @Column()
+  @Column({ type: 'varchar', unique: true })
   username: string;
 
-  @Column()
+  @Column({ type: 'varchar' })
   password: string;
 
-  @Column()
-  date_of_birth: Date;
+  @Column({ type: 'date', nullable: true })
+  dateOfBirth?: Date;
 
-  @Column()
-  phoneNumber: string;
+  @Column({ type: 'varchar', nullable: true })
+  phoneNumber?: string;
 
-  @Column({ default: false })
+  @Column({ type: 'boolean', default: false })
   verified: boolean;
 
-  @Column({ nullable: true })
-  gender: 'Male' | 'Female';
+  @Column({ type: 'enum', enum: ['Male', 'Female'], nullable: true })
+  gender?: 'Male' | 'Female';
 
-  @Column({ nullable: true })
-  photo: string;
+  @Column({ type: 'varchar', nullable: true })
+  photo?: string;
 
   @OneToMany(() => JobOffer, (jobOffer) => jobOffer.recruiter)
   jobOffers: JobOffer[];

@@ -28,7 +28,6 @@ export class JobApplicationService {
     }
     
     const jobApplication = this.jobApplicationRepository.create({...createJobApplicationDto, user: userr});
-    console.log(jobApplication)
     return this.jobApplicationRepository.save(jobApplication);
   }
 
@@ -52,4 +51,24 @@ export class JobApplicationService {
     await this.findOne(id); 
     await this.jobApplicationRepository.delete(id);
   }
+
+
+  async findApplicants(id:string): Promise<JobApplication [] | void> {
+
+    const jobApps: JobApplication[] = await this.jobApplicationRepository.find({
+      where: {jobOffer: {id:id},
+               status: 'pending', 
+                },
+      relations: ['user']
+    })
+
+    return jobApps
+}
+
+async update_status(job_application: JobApplication, status: "accepted" | "rejected"):Promise<void> {
+  job_application.status = status;
+  await this.jobApplicationRepository.save(job_application);
+
+}
+
 }

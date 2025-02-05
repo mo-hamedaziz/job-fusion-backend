@@ -92,12 +92,17 @@ export class ProfileService {
         user.languages = user.languages.filter(lang => lang !== language);
         await this.userService.save(user);
         return user.languages
-
-
     }
 
+    
 
+    async Get_User(id:string) {
 
+        const user:User = await this.userService.findOne(id);
+        console.log(user)
+
+        return user
+    }
 
 
 }

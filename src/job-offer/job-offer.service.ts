@@ -11,6 +11,8 @@ import { Recruiter } from 'src/recruiter/Entities/recruiter.entity';
 import { JobOffer } from './entities/job-offer.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { JobApplication } from 'src/job-application/entities/job-application.entity';
+import { User } from 'src/user/Entities/User.entity';
 
 @Injectable()
 export class JobOfferService {
@@ -22,6 +24,9 @@ export class JobOfferService {
 
     @InjectRepository(Recruiter)
     private readonly recruiterRepository: Repository<Recruiter>,
+
+    @InjectRepository(JobApplication)
+    private readonly jobapplicationsRepository: Repository<JobApplication>,
   ) {}
 
   async create(createJobOfferDto: CreateJobOfferDto): Promise<JobOffer> {
@@ -36,10 +41,12 @@ export class JobOfferService {
 
       const jobOffer = this.jobOfferRepository.create({
         ...createJobOfferDto,
-        recruiter,
+        recruiter
       });
 
-      return this.jobOfferRepository.save(jobOffer);
+      await this.jobOfferRepository.save(jobOffer);
+      console.log("wsilt lina")
+      return ;
     } catch (error) {
       this.logger.error('Error creating job offer', error.stack);
       throw new BadRequestException('Error creating job offer');
@@ -151,4 +158,7 @@ export class JobOfferService {
       );
     }
   }
-}
+
+
+
+  }

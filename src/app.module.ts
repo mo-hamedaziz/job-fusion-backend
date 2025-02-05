@@ -13,6 +13,8 @@ import 'dotenv/config';
 import { JobOffer } from './job-offer/entities/job-offer.entity';
 import { JobApplicationModule } from './job-application/job-application.module';
 import { ProfileModule } from './profile/profile.module';
+import { NotificationsModule } from './notifications/notifications.module';
+import { JobApplication } from './job-application/entities/job-application.entity';
 
 @Module({
   imports: [
@@ -28,14 +30,16 @@ import { ProfileModule } from './profile/profile.module';
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
       synchronize: true,
-      entities: [Recruiter, User, JobOffer],
+      entities: [Recruiter, User, JobOffer, JobApplication],
       autoLoadEntities: true,
+
     }),
     UserModule,
     RecruiterModule,
     JobOfferModule,
     JobApplicationModule,
     ProfileModule,
+    NotificationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

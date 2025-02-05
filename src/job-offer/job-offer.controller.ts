@@ -7,11 +7,15 @@ import {
   Param,
   Delete,
   Query,
+  Req,
+  Res,
 } from '@nestjs/common';
 import { JobOfferService } from './job-offer.service';
 import { CreateJobOfferDto } from './dto/create-job-offer.dto';
 import { UpdateJobOfferDto } from './dto/update-job-offer.dto';
 import { JobOffer } from './entities/job-offer.entity';
+import { AuthenticatedRequest } from 'src/auth/guards/AuthenticatedResponse';
+import { JobApplication } from 'src/job-application/entities/job-application.entity';
 
 @Controller('job-offer')
 export class JobOfferController {
@@ -56,4 +60,6 @@ export class JobOfferController {
   async toggleActive(@Param('id') id: string): Promise<JobOffer> {
     return this.jobOfferService.toggleActive(id);
   }
+
+ 
 }

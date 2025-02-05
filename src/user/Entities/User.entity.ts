@@ -6,6 +6,12 @@ export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Column({ type: 'varchar' })
+  firstName: string;
+
+  @Column({ type: 'varchar' })
+  lastName: string;
+
   @Column({ type: 'varchar', unique: true })
   email: string;
 
@@ -15,47 +21,45 @@ export class User {
   @Column({ type: 'varchar' })
   password: string;
 
-  @Column({ type: 'date' })
-  date_of_birth: Date;
+  @Column({ type: 'date', nullable: true })
+  dateOfBirth?: Date;
 
   @Column({ type: 'varchar', nullable: true })
-  country: string;
+  country?: string;
 
   @Column({ type: 'varchar', nullable: true })
-  region: string;
+  region?: string;
 
   @Column({
     type: 'varchar',
     nullable: true,
-    default:
-      '"Motivated professional seeking opportunities to learn, contribute, and grow in a dynamic environment',
   })
-  summary: string;
+  summary?: string;
 
   @Column({ type: 'varchar', nullable: true })
-  phoneNumber: string;
+  phoneNumber?: string;
 
-  @Column({ type: 'enum', enum: ['Male', 'Female'] })
-  gender: 'Male' | 'Female';
+  @Column({ type: 'enum', enum: ['Male', 'Female'], nullable: true })
+  gender?: 'Male' | 'Female';
 
   @Column({ type: 'boolean', default: false })
   verified: boolean;
 
   @Column({ type: 'varchar', nullable: true })
-  cv: string;
+  cv?: string;
 
   @Column({ type: 'varchar', nullable: true })
-  photo: string;
+  photo?: string;
 
   @OneToMany(() => JobApplication, (jobApplication) => jobApplication.user)
   jobApplications: JobApplication[];
 
-  @Column({ type: 'simple-array', nullable: true })
-  languages: string[];
+  @Column('simple-array', { nullable: true })
+  languages?: string[];
 
-  @Column({ type: 'simple-array', nullable: true })
-  studies: string[];
+  @Column('simple-array', { nullable: true })
+  studies?: string[];
 
-  @Column({ type: 'simple-array', nullable: true })
-  work_experiences: string[];
+  @Column('simple-array', { nullable: true })
+  work_experiences?: string[];
 }

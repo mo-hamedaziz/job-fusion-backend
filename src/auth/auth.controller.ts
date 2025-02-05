@@ -193,4 +193,10 @@ export class AuthController {
       return req.user;
     }
   }
+
+  @Get('logout')
+  logout(@Res() res: Response) {
+    res.clearCookie('token');
+    return res.status(200).json({ message: 'Logged out successfully' });
+  }
 }

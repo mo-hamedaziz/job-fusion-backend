@@ -5,16 +5,12 @@ export class CreateJobApplicationDto {
   @IsNotEmpty()
   jobOfferId: string;
 
-  @IsUUID()
-  @IsNotEmpty()
-  userId: string;
-
   @IsString()
   cvPath?: string; 
 
-  @IsOptional()
+  
   @IsString()
-  coverLetterUrl?: string; 
+  coverLetterPath?: string; 
 
   @IsOptional()
   @IsString()

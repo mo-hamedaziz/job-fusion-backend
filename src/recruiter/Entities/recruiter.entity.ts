@@ -31,7 +31,7 @@ export class Recruiter {
   @Column({ default: false })
   verified: boolean;
 
-  @Column()
+  @Column({ nullable: true })
   gender: 'Male' | 'Female';
 
   @Column({ nullable: true })

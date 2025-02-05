@@ -28,6 +28,7 @@ export class JobApplication {
   @ManyToOne(() => User, (user) => user.jobApplications, { onDelete: "CASCADE" })
   user: User;
 
+
   @ManyToOne(() => JobOffer, (jobOffer) => jobOffer.jobApplications)
   jobOffer: JobOffer;
 

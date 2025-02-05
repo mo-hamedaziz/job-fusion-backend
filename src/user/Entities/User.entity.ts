@@ -50,12 +50,12 @@ export class User {
   @OneToMany(() => JobApplication, (jobApplication) => jobApplication.user)
   jobApplications: JobApplication[];
 
-  @Column('simple-array')
+  @Column({ type: 'simple-array', nullable: true })
   languages: string[];
 
-  @Column('simple-array')
+  @Column({ type: 'simple-array', nullable: true })
   studies: string[];
 
-  @Column('simple-array')
+  @Column({ type: 'simple-array', nullable: true })
   work_experiences: string[];
 }

@@ -26,14 +26,15 @@ import { APP_GUARD } from '@nestjs/core';
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: 'aaa',
-      database: 'db_project',
+      host: process.env.DB_HOST,
+      port: +process.env.DB_PORT,
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
       synchronize: true,
       entities: [Recruiter, User, JobOffer, JobApplication],
       autoLoadEntities: true,
+
     }),
     ThrottlerModule.forRoot([{
       ttl: 10000,

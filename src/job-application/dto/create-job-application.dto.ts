@@ -1,20 +1,19 @@
 import { IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
 
 export class CreateJobApplicationDto {
+  /*@IsUUID()
+  @IsNotEmpty()
+  id: string;*/
+
   @IsUUID()
   @IsNotEmpty()
   jobOfferId: string;
 
-  @IsUUID()
-  @IsNotEmpty()
-  userId: string;
-
   @IsString()
   cvPath?: string; 
 
-  @IsOptional()
   @IsString()
-  coverLetterUrl?: string; 
+  coverLetterPath?: string; 
 
   @IsOptional()
   @IsString()

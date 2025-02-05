@@ -1,6 +1,6 @@
 import { JobOffer } from 'src/job-offer/entities/job-offer.entity';
 import { User } from 'src/user/Entities/User.entity';
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 
 @Entity()
 export class JobApplication {
@@ -28,7 +28,7 @@ export class JobApplication {
   @ManyToOne(() => User, (user) => user.jobApplications, { onDelete: "CASCADE" })
   user: User;
 
-  @ManyToOne(() => JobOffer, (jobOffer) => jobOffer.jobApplications)
+  @ManyToOne(() => JobOffer, (jobOffer) => jobOffer.jobApplications, { onDelete: "CASCADE" })
   jobOffer: JobOffer;
 
   @Column({type: 'enum', enum: ['pending','accepted','rejected'], default: 'pending'})

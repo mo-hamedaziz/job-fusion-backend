@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Req, Res, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req, Res, UseGuards, UnauthorizedException, HttpStatus, } from '@nestjs/common';
 import { JobApplicationService } from './job-application.service';
 import { CreateJobApplicationDto } from './dto/create-job-application.dto';
 import { UpdateJobApplicationDto } from './dto/update-job-application.dto';
@@ -6,7 +6,8 @@ import { AuthenticatedRequest } from 'src/auth/guards/AuthenticatedResponse';
 import { JobApplication } from './entities/job-application.entity';
 import { Response } from 'express';
 import { NotificationsService } from 'src/notifications/notifications.service';
-
+import { AuthCookieGuard } from 'src/auth/guards/user.guard';
+@UseGuards(AuthCookieGuard)
 @Controller('job-application')
 export class JobApplicationController {
   constructor(private readonly jobApplicationService: JobApplicationService,
@@ -14,9 +15,17 @@ export class JobApplicationController {
   ) {}
 
   @Post()
-  create(@Body() createJobApplicationDto: CreateJobApplicationDto) {
-    return this.jobApplicationService.create(createJobApplicationDto);
+  async create(@Req() req: AuthenticatedRequest, @Body() createJobApplicationDto: CreateJobApplicationDto, @Res() res: Response) {
+  if (!req.user) {
+    throw new UnauthorizedException('User not authenticated');
   }
+  
+  console.log(req.user.userid);
+  console.log(createJobApplicationDto);
+  await this.jobApplicationService.create(createJobApplicationDto, req.user.userid);
+  return res.status(HttpStatus.CREATED).json({message:'job application submitted'})
+}
+
 
   @Get()
   findAll() {

@@ -41,10 +41,12 @@ export class JobOfferService {
 
       const jobOffer = this.jobOfferRepository.create({
         ...createJobOfferDto,
-        recruiter,
+        recruiter
       });
 
-      return this.jobOfferRepository.save(jobOffer);
+      await this.jobOfferRepository.save(jobOffer);
+      console.log("wsilt lina")
+      return ;
     } catch (error) {
       this.logger.error('Error creating job offer', error.stack);
       throw new BadRequestException('Error creating job offer');

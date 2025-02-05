@@ -9,7 +9,11 @@ import * as bcrypt from 'bcrypt';
 import { JwtPayload } from './dto/jwtpayload.interface';
 import * as jwt from 'jsonwebtoken';
 import { IsInstance } from 'class-validator';
+import { SkipThrottle } from '@nestjs/throttler';
 
+
+
+@SkipThrottle()
 @Injectable()
 export class AuthService {
   private transporter: any;
@@ -22,12 +26,12 @@ export class AuthService {
     private recruiterRepository: Repository<Recruiter>,
   ) {
     this.transporter = nodemailer.createTransport({
-      host: 'sandbox.smtp.mailtrap.io',
-      port: 2525,
-      secure: false,
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true,
       auth: {
-        user: '8fb5d5a2213504',
-        pass: 'afe7bfc37379d8',
+        user: 'youssef.rouissi41@gmail.com',
+        pass: 'cwus wdak sldc umqg',
       },
     });
   }

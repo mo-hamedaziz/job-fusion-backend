@@ -9,6 +9,7 @@ import {
   Query,
   Req,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { JobOfferService } from './job-offer.service';
 import { CreateJobOfferDto } from './dto/create-job-offer.dto';
@@ -16,6 +17,7 @@ import { UpdateJobOfferDto } from './dto/update-job-offer.dto';
 import { JobOffer } from './entities/job-offer.entity';
 import { AuthenticatedRequest } from 'src/auth/guards/AuthenticatedResponse';
 import { JobApplication } from 'src/job-application/entities/job-application.entity';
+import { AuthCookieGuard } from 'src/auth/guards/user.guard';
 
 @Controller('job-offer')
 export class JobOfferController {
@@ -28,12 +30,12 @@ export class JobOfferController {
     return this.jobOfferService.create(createJobOfferDto);
   }
 
+  @UseGuards(AuthCookieGuard)
   @Get()
-  async findByRecruiter(
-    @Query('recruiterId') recruiterId?: string,
-  ): Promise<JobOffer[]> {
-    if (recruiterId) {
-      return this.jobOfferService.findByRecruiter(recruiterId);
+  async findByRecruiter(@Req() req:AuthenticatedRequest): Promise<JobOffer[]> {
+    const recruiterID= req.user.userid;
+    if (recruiterID) {
+      return this.jobOfferService.findByRecruiter(recruiterID);
     }
     return this.jobOfferService.findAll();
   }
